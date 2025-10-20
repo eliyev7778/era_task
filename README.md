@@ -6,7 +6,128 @@ Backend Laravel + Passport ilə hazırlanıb, frontend React üçün tam funksio
 
 ## Quraşdırma
 
-### 1. Repo klonla
+### 1. Repo klonlayın
 ```bash
-git clone <repo-url>
-cd <repo-folder>
+git clone https://github.com/eliyev7778/era_task.git
+```
+### 2. .env faylını kopyalayın
+```bash
+cp .env.example .env
+```
+### 3. Composer paketlərini quraşdırın
+```bash
+composer install
+```
+### 4. Node.js paketlərini quraşdırın
+```bash
+$ npm install
+```
+### 5. Laravel açarını yaradın
+```bash
+$ php artisan key:generate
+```
+### 6. Database migrasiyalarını və seed-ləri işə salın
+```bash
+$ php artisan migrate --seed
+```
+### 7. Modullardakı seed-ləri işə salın
+```bash
+$ php artisan module:make-seed
+```
+### 8. Modullardakı seed-ləri işə salın
+```bash
+$ php artisan serve
+```
+### 9. Queue işlətmək
+```bash
+$ php artisan queue:work
+```
+### 10. Swagger/OpenAPI sənədlərini generasiya edin
+```bash
+$ php artisan l5-swagger:generate
+```
+###  swagger url http://127.0.0.1:8000/api/documentation
+
+erDiagram
+USERS {
+BIGINT id PK
+STRING name
+STRING email
+STRING password
+DATETIME email_verified_at
+BOOLEAN marketing_opt_in
+DATETIME last_active_at
+DATETIME created_at
+DATETIME updated_at
+}
+
+    ADMINS {
+        BIGINT id PK
+        STRING name
+        STRING email
+        STRING password
+        DATETIME email_verified_at
+        DATETIME created_at
+        DATETIME updated_at
+    }
+
+    PRODUCTS {
+        BIGINT id PK
+        STRING name
+        DECIMAL price
+        INT stock
+        ENUM status
+        BIGINT category_id FK
+        DATETIME created_at
+        DATETIME updated_at
+    }
+
+    PRODUCT_CATEGORIES {
+        BIGINT id PK
+        STRING name
+        DATETIME created_at
+        DATETIME updated_at
+    }
+
+    PIVOT_PRODUCT_USER {
+        BIGINT id PK
+        BIGINT user_id FK
+        BIGINT product_id FK
+        ENUM type
+        DATETIME created_at
+        DATETIME updated_at
+    }
+
+    SEGMENTS {
+        BIGINT id PK
+        STRING name
+        JSON filter_json
+        DATETIME created_at
+        DATETIME updated_at
+    }
+
+    CAMPAIGNS {
+        BIGINT id PK
+        STRING name
+        STRING subject
+        STRING template_key
+        STRING from_email
+        BIGINT segment_id FK
+        JSON filter_json
+        ENUM status
+        INT total_recipients
+        INT sent_count
+        INT error_count
+        BIGINT admin_id FK
+        DATETIME created_at
+        DATETIME updated_at
+    }
+
+    %% Relationships
+    USERS ||--o{ PIVOT_PRODUCT_USER : "has"
+    PRODUCTS ||--o{ PIVOT_PRODUCT_USER : "has"
+    PRODUCTS }|--|| PRODUCT_CATEGORIES : "belongs to"
+    USERS ||--o{ CAMPAIGN_USER : "receives"
+    CAMPAIGNS ||--o{ CAMPAIGN_USER : "includes"
+    CAMPAIGNS }|--|| SEGMENTS : "belongs to"
+    CAMPAIGNS }|--|| ADMINS : "created by"
