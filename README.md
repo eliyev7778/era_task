@@ -1,65 +1,76 @@
 # Bulk E-mail Laravel API
 
 ## Təsvir
+
 Bu layihə adminin seçilmiş kriteriyalara uyğun istifadəçilərə böyük həcmdə e-mail göndərməsinə imkan verir.  
 Backend Laravel + Passport ilə hazırlanıb, frontend React üçün tam funksional REST API təqdim edir.
 
 ## Quraşdırma
 
 ### 1. Repo klonlayın
+
 ```bash
 git clone https://github.com/eliyev7778/era_task.git
 ```
+
 ### 2. .env faylını kopyalayın
+
 ```bash
 cp .env.example .env
 ```
+
 ### 3. Composer paketlərini quraşdırın
+
 ```bash
 composer install
 ```
+
 ### 4. Node.js paketlərini quraşdırın
+
 ```bash
 $ npm install
 ```
+
 ### 5. Laravel açarını yaradın
+
 ```bash
 $ php artisan key:generate
 ```
+
 ### 6. Database migrasiyalarını və seed-ləri işə salın
+
 ```bash
 $ php artisan migrate --seed
 ```
+
 ### 7. Modullardakı seed-ləri işə salın
+
 ```bash
 $ php artisan module:make-seed
 ```
+
 ### 8. Modullardakı seed-ləri işə salın
+
 ```bash
 $ php artisan serve
 ```
+
 ### 9. Queue işlətmək
+
 ```bash
 $ php artisan queue:work
 ```
+
 ### 10. Swagger/OpenAPI sənədlərini generasiya edin
+
 ```bash
 $ php artisan l5-swagger:generate
 ```
-###  swagger url http://127.0.0.1:8000/api/documentation
+
+### swagger url http://127.0.0.1:8000/api/documentation
 
 erDiagram
-USERS {
-BIGINT id PK
-STRING name
-STRING email
-STRING password
-DATETIME email_verified_at
-BOOLEAN marketing_opt_in
-DATETIME last_active_at
-DATETIME created_at
-DATETIME updated_at
-}
+
 
     ADMINS {
         BIGINT id PK
