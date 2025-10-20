@@ -49,7 +49,7 @@ $ php artisan migrate --seed
 $ php artisan module:make-seed
 ```
 
-### 8. Modullardakı seed-ləri işə salın
+### 8. Server qaldırın
 
 ```bash
 $ php artisan serve
