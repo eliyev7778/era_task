@@ -37,10 +37,16 @@ $ npm install
 $ php artisan key:generate
 ```
 
-### 6. Database migrasiyalarını və seed-ləri işə salın
+### 6. Database migrasiyalarını və seed-ləri işə salın və passport install edin
 
 ```bash
 $ php artisan migrate --seed
+```
+### 6. Passport install edin və client id client secret env-ye elave edin
+
+```bash
+$ php artisan passport:install
+$ php artisan passport:client --password
 ```
 
 ### 7. Modullardakı seed-ləri işə salın
