@@ -1,0 +1,1245 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Era Task API Documentation",
+        "description": "API documentation for authentication and admin management.",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/admin/register": {
+            "post": {
+                "tags": [
+                    "Admin Authentication"
+                ],
+                "summary": "Register a new admin",
+                "operationId": "82eef8879ce848a3d6b25cee980b9cdd",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterAdminRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful registration",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RegisterAdminResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/login": {
+            "post": {
+                "tags": [
+                    "Admin Authentication"
+                ],
+                "summary": "Login an existing admin user",
+                "operationId": "fb63ce6528ee8d3c5a1188b683e05552",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginAdminRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginAdminResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/logout": {
+            "post": {
+                "tags": [
+                    "Admin Authentication"
+                ],
+                "summary": "Logout the authenticated admin",
+                "operationId": "aae3f98888542465efe98904b0f20087",
+                "responses": {
+                    "200": {
+                        "description": "Successful logout",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LogoutAdminResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LogoutErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/campaigns": {
+            "get": {
+                "tags": [
+                    "Campaigns"
+                ],
+                "summary": "Get paginated list of campaigns",
+                "operationId": "ef352ea3c85942668890a7bf6a14d840",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filter by status (draft|queued|sending|done|failed)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number for pagination",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated list of campaigns",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CampaignListResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Campaign"
+                ],
+                "summary": "Create a new campaign",
+                "operationId": "6393c021fc9cc2256183b3e14df01fd5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateCampaignRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Campaign created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateCampaignResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/campaigns/{id}/queue": {
+            "post": {
+                "tags": [
+                    "Campaign"
+                ],
+                "summary": "Queue a campaign to start sending emails",
+                "operationId": "b6254f169012f3d6f38fecbcb1a32a7f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Campaign queued",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "queued"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Campaign not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Campaign not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/unsubscribe/{signed}": {
+            "get": {
+                "tags": [
+                    "Campaigns"
+                ],
+                "summary": "Unsubscribe from marketing emails",
+                "operationId": "d8114047ecc810aef424287ea2d2b7b2",
+                "parameters": [
+                    {
+                        "name": "signed",
+                        "in": "path",
+                        "description": "Signed unsubscribe token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successfully unsubscribed"
+                    },
+                    "400": {
+                        "description": "Invalid or expired link"
+                    }
+                },
+                "security": []
+            }
+        },
+        "/api/v1/campaigns/{id}": {
+            "get": {
+                "tags": [
+                    "Campaigns"
+                ],
+                "summary": "Get a single campaign",
+                "operationId": "24e491db356eef9f33f52197b9dcb535",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Campaign ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Campaign data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CampaignResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Campaign not found"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/campaigns/{id}/status": {
+            "get": {
+                "tags": [
+                    "Campaigns"
+                ],
+                "summary": "Get campaign statistics",
+                "operationId": "09946e35cfd14dd5e4cbcc72c5caffb3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Campaign ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Campaign stats",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CampaignStatsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Campaign not found"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/campaigns/{id}/test-send": {
+            "post": {
+                "tags": [
+                    "Campaigns"
+                ],
+                "summary": "Send campaign template to a single email for testing",
+                "operationId": "ff9df5048378434ce53c87da654d0efa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Campaign ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TestSendCampaignRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Test email sent successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TestSendCampaignResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/health": {
+            "get": {
+                "tags": [
+                    "Health"
+                ],
+                "summary": "Check API health",
+                "operationId": "959091353467a5dbb303ba966264d059",
+                "responses": {
+                    "200": {
+                        "description": "API is healthy",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "API is healthy"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/health/queue": {
+            "get": {
+                "tags": [
+                    "Health"
+                ],
+                "summary": "Check queue health",
+                "operationId": "95146cf9b76d5d54b75068f5b37b84cd",
+                "responses": {
+                    "200": {
+                        "description": "Queue system is healthy",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Queue system is healthy"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/segments": {
+            "get": {
+                "tags": [
+                    "Segments"
+                ],
+                "summary": "List all segments with pagination",
+                "operationId": "20dfeed7bba402127ef8e0493879b25f",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated segments list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SegmentListResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Segments"
+                ],
+                "summary": "New segment generate",
+                "operationId": "9d9e1c7825ab2fa9024da9260a502409",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateSegmentSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Segment uğurla yaradıldı",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 12
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Aktiv istifadəçilər"
+                                        },
+                                        "filter_json": {
+                                            "type": "object",
+                                            "example": {
+                                                "user": {
+                                                    "email_verified": true
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/segments/{id}": {
+            "get": {
+                "tags": [
+                    "Segments"
+                ],
+                "summary": "Get segment details by ID",
+                "description": "Returns a specific segment by its ID",
+                "operationId": "a03b59530a493e40e0123e371d5d8db6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Segment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Segment found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SegmentResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Segment not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Segment not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LogoutErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/segments/{id}/preview": {
+            "get": {
+                "tags": [
+                    "Segments"
+                ],
+                "summary": "Preview a segment",
+                "operationId": "770a0762640e94517c6ec13ed37b1c60",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Segment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Segment preview",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SegmentPreviewResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Segment not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Segment not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "LoginAdminRequest": {
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "admin@example.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password123"
+                    }
+                },
+                "type": "object"
+            },
+            "LoginAdminResponse": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "token": {
+                        "type": "string",
+                        "example": "1|abcde12345"
+                    },
+                    "data": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "Sadig Bahlulzada"
+                            },
+                            "email": {
+                                "type": "string",
+                                "example": "admin@example.com"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "LoginErrorResponse": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Invalid credentials"
+                    }
+                },
+                "type": "object"
+            },
+            "LogoutAdminResponse": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "LogoutErrorResponse": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Unauthenticated."
+                    }
+                },
+                "type": "object"
+            },
+            "RegisterAdminRequest": {
+                "required": [
+                    "name",
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Sadig Bahlulzada"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "admin@example.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password123"
+                    }
+                },
+                "type": "object"
+            },
+            "RegisterAdminResponse": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "token": {
+                        "type": "string",
+                        "example": "1|abcde12345"
+                    },
+                    "data": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "Sadig Bahlulzada"
+                            },
+                            "email": {
+                                "type": "string",
+                                "example": "admin@example.com"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ErrorResponse": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Something went wrong"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Server Error"
+                    }
+                },
+                "type": "object"
+            },
+            "CampaignListResponse": {
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CampaignStatsResponse"
+                        }
+                    },
+                    "current_page": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "per_page": {
+                        "type": "integer",
+                        "example": 15
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": 100
+                    },
+                    "last_page": {
+                        "type": "integer",
+                        "example": 7
+                    }
+                },
+                "type": "object"
+            },
+            "CreateCampaignRequest": {
+                "required": [
+                    "subject",
+                    "template_key"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "New Year Promo"
+                    },
+                    "subject": {
+                        "type": "string",
+                        "example": "Happy New Year!"
+                    },
+                    "template_key": {
+                        "type": "string",
+                        "example": "discount"
+                    },
+                    "from_email": {
+                        "type": "string",
+                        "example": "admin@example.com"
+                    },
+                    "segment_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "filter_json": {
+                        "type": "object",
+                        "example": []
+                    }
+                },
+                "type": "object"
+            },
+            "CreateCampaignResponse": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "draft"
+                    },
+                    "total_recipients": {
+                        "type": "integer",
+                        "example": 2841
+                    }
+                },
+                "type": "object"
+            },
+            "CampaignStatsResponse": {
+                "properties": {
+                    "total_recipients": {
+                        "type": "integer",
+                        "example": 1000
+                    },
+                    "sent_count": {
+                        "type": "integer",
+                        "example": 800
+                    },
+                    "error_count": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "sending"
+                    }
+                },
+                "type": "object"
+            },
+            "CampaignResponse": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Holiday Promo"
+                    },
+                    "subject": {
+                        "type": "string",
+                        "example": "Special Discount!"
+                    },
+                    "template_key": {
+                        "type": "string",
+                        "example": "promotion"
+                    },
+                    "from_email": {
+                        "type": "string",
+                        "example": "marketing@example.com"
+                    },
+                    "segment_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "draft"
+                    },
+                    "total_recipients": {
+                        "type": "integer",
+                        "example": 1000
+                    },
+                    "sent_count": {
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "error_count": {
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2025-10-20T12:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2025-10-20T12:00:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "TestSendCampaignRequest": {
+                "required": [
+                    "email"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "test@example.com"
+                    }
+                },
+                "type": "object"
+            },
+            "TestSendCampaignResponse": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Test email sent successfully"
+                    }
+                },
+                "type": "object"
+            },
+            "CreateSegmentSchema": {
+                "title": "Create Segment",
+                "description": "Yeni bir seqment yaratmaq üçün məlumat strukturu",
+                "required": [
+                    "name",
+                    "filter_json"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Aktiv istifadəçilər"
+                    },
+                    "filter_json": {
+                        "type": "object",
+                        "example": {
+                            "user": {
+                                "email_verified": true,
+                                "marketing_opt_in": false
+                            },
+                            "product": {
+                                "price_min": 10,
+                                "price_max": 100
+                            }
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "SegmentListResponse": {
+                "properties": {
+                    "current_page": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": "Aktiv istifadəçilər"
+                                },
+                                "filter_json": {
+                                    "type": "object",
+                                    "example": {
+                                        "email_verified": true,
+                                        "marketing_opt_in": true
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "first_page_url": {
+                        "type": "string",
+                        "example": "/api/v1/segments?page=1"
+                    },
+                    "last_page": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "last_page_url": {
+                        "type": "string",
+                        "example": "/api/v1/segments?page=5"
+                    },
+                    "next_page_url": {
+                        "type": "string",
+                        "example": "/api/v1/segments?page=2"
+                    },
+                    "prev_page_url": {
+                        "type": "string",
+                        "example": null
+                    },
+                    "per_page": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": 50
+                    }
+                },
+                "type": "object"
+            },
+            "SegmentPreviewResponse": {
+                "properties": {
+                    "total_recipients": {
+                        "type": "integer",
+                        "example": 2841
+                    },
+                    "sample": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "example": 123
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": "Aylin M."
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "example": "aylin@example.com"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "SegmentResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Active Users Segment"
+                    },
+                    "filter_json": {
+                        "type": "object",
+                        "example": {
+                            "email_verified": true,
+                            "marketing_opt_in": true
+                        }
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-10-19T12:34:56Z"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "passport": {
+                "type": "oauth2",
+                "flows": {
+                    "password": {
+                        "tokenUrl": "http://127.0.0.1:8000/oauth/token",
+                        "refreshUrl": "http://127.0.0.1:8000oauth/token/refresh",
+                        "scopes": []
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Admin Authentication",
+            "description": "Admin Authentication"
+        },
+        {
+            "name": "Campaigns",
+            "description": "Campaigns"
+        },
+        {
+            "name": "Campaign",
+            "description": "Campaign"
+        },
+        {
+            "name": "Health",
+            "description": "Health"
+        },
+        {
+            "name": "Segments",
+            "description": "Segments"
+        }
+    ]
+}

@@ -1,0 +1,31 @@
+{
+    "name": "nwidart/segment",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Segment\\": "",
+            "Modules\\Segment\\App\\": "app/",
+            "Modules\\Segment\\Database\\Factories\\": "database/factories/",
+            "Modules\\Segment\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Segment\\Tests\\": "tests/"
+        }
+    }
+}

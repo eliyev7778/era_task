@@ -1,0 +1,7 @@
+{
+    "Authentication": true,
+    "ProductCategory": true,
+    "Product": true,
+    "Segment": true,
+    "Campaign": true
+}
