@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->boolean('marketing_opt_in')->default(false)->after('email_verified_at');
             $table->timestamp('last_active_at')->nullable()->after('marketing_opt_in');
-            $table->string('status')->default('active')->after('registered_at');
+            $table->string('status')->default('active')->after('last_active_at');
 
             $table->index('marketing_opt_in');
             $table->index('last_active_at');
