@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Modules\Campaign\App\Http\Controllers\CampaignController;
 use Modules\Campaign\App\Http\Controllers\HealthController;

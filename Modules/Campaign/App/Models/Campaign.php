@@ -18,9 +18,7 @@ class Campaign extends Model
         'error_count' => 'integer',
     ];
 
-    /**
-     * Campaign segment relation (optional)
-     */
+
     public function segment(): BelongsTo
     {
         return $this->belongsTo(Segment::class);

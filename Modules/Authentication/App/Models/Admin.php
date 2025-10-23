@@ -6,12 +6,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Modules\Authentication\Database\Factories\AdminFactory;
 
 
 class Admin extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     */
+    protected $guarded = ['id'];
+
+    protected static function newFactory(): AdminFactory
+    {
+        return AdminFactory::new();
+    }
     /**
      * The attributes that are mass assignable.
      *

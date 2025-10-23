@@ -73,6 +73,12 @@ $ php artisan queue:work
 $ php artisan l5-swagger:generate
 ```
 
+### 11. Testlərin yoxlanılması
+
+```bash
+$ php artisan test
+```
+
 ### swagger url http://127.0.0.1:8000/api/documentation
 
 erDiagram
@@ -148,3 +154,51 @@ erDiagram
     CAMPAIGNS ||--o{ CAMPAIGN_USER : "includes"
     CAMPAIGNS }|--|| SEGMENTS : "belongs to"
     CAMPAIGNS }|--|| ADMINS : "created by"
+
+# Docker ilə Layihəsinin qurulması
+
+---
+
+## 1. Repo klonlayın
+```bash
+git clone https://github.com/eliyev7778/era_task.git
+cd era_task
+```
+## 2. .env faylını yaradın
+```bash
+cp .env.example .env
+```
+## 3. Docker Compose ilə container-ləri işə salın
+```bash
+docker-compose up -d --build
+```
+## 4. Composer asılılıqlarını quraşdırın
+```bash
+docker-compose exec app composer install
+```
+## 5. Application key yaradın
+```bash
+docker-compose exec app php artisan key:generate
+```
+## 6. Database migration və seed
+```bash
+docker-compose exec app php artisan migrate --seed
+```
+## 7. Modulların seed-ləri
+```bash
+docker-compose exec app php artisan module:make-seed
+```
+## 8. Cache və config clear
+```bash
+docker-compose exec app php artisan config:clear
+docker-compose exec app php artisan cache:clear
+docker-compose exec app php artisan route:clear
+```
+## 9. Testləri işə salmaq
+```bash
+docker-compose exec app php artisan test
+```
+## 10. Queue işlətmək
+```bash
+docker-compose exec app php artisan queue:work
+```
